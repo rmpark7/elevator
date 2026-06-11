@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공간 프로토콜 프로젝트</title>
+    <style>
+        /* 기본 스타일 리셋 및 배경 설정 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #f5f6fa;
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        /* 인트로 애니메이션 컨테이너 */
+        #intro-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #1e1e24; /* 몰입감을 위해 어두운 배경으로 시작 */
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 80px;
+            transition: opacity 1s ease-out;
+        }
+
+        /* 돼지 저금통 스타일 (이모지 활용) */
+        .piggy-bank {
+            font-size: 100px;
+            position: relative;
+            z-index: 10;
+            transform: scale(1);
+            transition: transform 0.1s ease;
+        }
+
+        /* 코인 스타일 및 추락 애니메이션 */
+        .coin {
+            font-size: 45px;
+            position: absolute;
+            top: -100px; /* 화면 위쪽 바깥에서 시작 */
+            opacity: 0;
+            animation: dropCoin 1.2s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
+        }
+
+        @keyframes dropCoin {
+            0% {
+                top: -100px;
+                opacity: 1;
+                transform: rotate(0deg);
+            }
+            90% {
+                top: calc(100vh - 210px); /* 돼지 머리 위 위치 계산 */
+                opacity: 1;
+                transform: rotate(360deg);
+            }
+            100% {
+                top: calc(100vh - 160px); /* 돼지 안으로 쏙 들어감 */
+                opacity: 0;
+                transform: rotate(360deg) scale(0.7);
+            }
+        }
+
+        /* 돼지가 코인을 먹었을 때 웅크리는 효과 */
+        @keyframes bouncePig {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15) translateY(-10px); }
+            100% { transform: scale(1); }
+        }
+
+        /* 메인 콘텐츠 스타일 (인트로가 끝난 후 등장) */
+        #main-content {
+            opacity: 0;
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            transition: opacity 1.5s ease-in-out;
+            margin-top: 50px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .project-desc {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="intro-container">
+        <div class="coin" id="coin">🪙</div>
+        <div class="piggy-bank" id="piggy">🐷</div>
+    </div>
+
+    <div id="main-content" id="main-text">
+        <h1>투명 엘리베이터: 시선 사로잡기 프로토콜</h1>
+        <p class="project-desc">
+            일상적인 공간의 기존 가설을 비틀고,<br>
+            낯선 제스처를 통해 사람들의 시선을 인터랙트하는 공간 프로토콜 프로젝트입니다.
+        </p>
+        </div>
+
+    <script>
+        const coin = document.getElementById('coin');
+        const piggy = document.getElementById('piggy');
+        const introContainer = document.getElementById('intro-container');
+        const mainContent = document.getElementById('main-content');
+
+        // 화면 중앙을 기준으로 코인 위치 맞추기
+        coin.style.left = 'calc(50% - 22.5px)'; 
+
+        // 코인이 떨어져서 돼지에게 닿는 타이밍에 맞춰 이벤트를 실행합니다.
+        // 애니메이션 총 1.2초 중 1.1초 시점에 돼지가 반응하도록 설정
+        setTimeout(() => {
+            // 돼지 쿵짝 애니메이션 적용
+            piggy.style.animation = "bouncePig 0.3s ease-in-out";
+        }, 1050);
+
+        // 애니메이션이 완전히 끝나고 메인 페이지로 전환되는 타이밍 (2.5초 뒤)
+        setTimeout(() => {
+            // 인트로 화면 투명하게 페이드아웃
+            introContainer.style.opacity = '0';
+            
+            // 메인 콘텐츠 서서히 나타나게 함
+            mainContent.style.opacity = '1';
+
+            // 페이드아웃이 끝난 후 인트로 레이어가 클릭을 방해하지 않도록 제거
+            setTimeout(() => {
+                introContainer.style.display = 'none';
+            }, 1000);
+        }, 2500);
+    </script>
+</body>
+</html>
