@@ -80,4 +80,116 @@
         .slider-wrapper { display: flex; transition: transform 0.4s ease-in-out; width: 100%; }
         
         .slide-item { min-width: 100%; width: 100%; display: flex; justify-content: center; align-items: center; background: #000; }
-        .slide-item img, .slide-item video { width: 100%; max-height:
+        .slide-item img, .slide-item video { width: 100%; max-height: 500px; object-fit: contain; vertical-align: middle; }
+
+        .slide-btn {
+            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: #fff;
+            border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 20px; cursor: pointer; z-index: 10; transition: background 0.2s;
+        }
+        .slide-btn:hover { background: rgba(0, 0, 0, 0.8); }
+        .slide-btn.prev { left: 15px; }
+        .slide-btn.next { right: 15px; }
+
+        .slider-dots { display: flex; justify-content: center; margin-top: 15px; gap: 8px; }
+        .dot { width: 10px; height: 10px; background: #ccc; border-radius: 50%; cursor: pointer; transition: background 0.2s; }
+        .dot.active { background: #c0392b; }
+    </style>
+</head>
+<body>
+
+    <div id="intro-container">
+        <div class="coin-aplus" id="coin">A+</div>
+        <div class="piggy-bank" id="piggy">
+            <div class="pig-slot"></div>
+            <div class="pig-eye"></div>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <h1>투명 엘리베이터 시선 유도 프로토콜</h1>
+
+        <div class="section-block">
+            <div class="section-title">
+                <span class="square-icon"></span> BEFORE
+            </div>
+            <p class="section-desc">
+                프로토콜 적용 전의 투명 엘리베이터 내부 모습입니다. <br>
+                대부분의 탑승객들은 대면하거나 소통하는 것을 어색해하며, 시선을 둘 곳을 찾지 못해 주로 스마트폰 화면만 바라보는 폐쇄적인 경향을 보입니다.
+            </p>
+            <div class="before-img-box">
+                <img src="before_photo.jpg" alt="Before 이미지">
+            </div>
+        </div>
+
+        <div class="section-block">
+            <div class="section-title">
+                <span class="square-icon"></span> AFTER
+            </div>
+            <p class="section-desc">
+                기존의 공간 가설을 비틀고 '제스처 프로토콜'을 삽입한 뒤의 모습입니다. <br>
+                엘리베이터 유리에 부착된 빨간 돼지 저금통과 A+ 코인 디자인이 탑승객들에게 신선한 자극과 재미를 줍니다. 사람들의 시선이 위에서 아래로 움직이며 자연스럽게 이목을 집중시키는 인터랙티브한 공간으로 변화했습니다.
+            </p>
+            
+            <div class="slider-container">
+                <button class="slide-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+                <button class="slide-btn next" onclick="moveSlide(1)">&#10095;</button>
+                
+                <div class="slider-wrapper" id="sliderWrapper">
+                    <div class="slide-item"><img src="image_2ec81f.jpg" alt="After 이미지 1"></div>
+                    <div class="slide-item"><img src="after_photo2.jpg" alt="After 이미지 2"></div>
+                    <div class="slide-item">
+                        <video src="after_video.mp4" controls loop muted playsinline></video>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-dots" id="sliderDots"></div>
+        </div>
+    </div>
+
+    <script>
+        // 인트로 스크립트
+        const coin = document.getElementById('coin');
+        const piggy = document.getElementById('piggy');
+        const introContainer = document.getElementById('intro-container');
+        const mainContent = document.getElementById('main-content');
+
+        coin.style.left = 'calc(50% - 35px)'; 
+        setTimeout(() => { piggy.style.animation = "bouncePig 0.4s ease-in-out forwards"; }, 1200);
+        setTimeout(() => {
+            introContainer.style.opacity = '0';
+            mainContent.style.opacity = '1';
+            setTimeout(() => { introContainer.style.display = 'none'; }, 1000);
+        }, 3200);
+
+        // 슬라이드 스크립트
+        const wrapper = document.getElementById('sliderWrapper');
+        const slides = document.querySelectorAll('.slide-item');
+        const dotsContainer = document.getElementById('sliderDots');
+        let currentIdx = 0;
+        const totalSlides = slides.length;
+
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if(i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => { currentIdx = i; updateSlider(); });
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function moveSlide(direction) {
+            currentIdx += direction;
+            if (currentIdx < 0) currentIdx = totalSlides - 1;
+            if (currentIdx >= totalSlides) currentIdx = 0;
+            updateSlider();
+        }
+
+        function updateSlider() {
+            wrapper.style.transform = `translateX(-${currentIdx * 100}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[currentIdx].classList.add('active');
+        }
+    </script>
+</body>
+</html>
