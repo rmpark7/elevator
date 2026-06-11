@@ -11,17 +11,23 @@
         /* --- 인트로 애니메이션 스타일 --- */
         #intro-container {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(135deg, rgba(230, 240, 245, 0.6), rgba(200, 220, 230, 0.4));
+            background: linear-gradient(135deg, rgba(230, 240, 245, 0.9), rgba(200, 220, 230, 0.8));
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             z-index: 1000; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 120px;
-            transition: opacity 1s ease-out;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
         }
         .piggy-bank { width: 200px; height: 150px; background-color: #e73c30; border-radius: 80px 90px 80px 80px; position: relative; z-index: 10; box-shadow: 0 10px 25px rgba(231, 60, 48, 0.3); transition: transform 0.1s ease; }
         .piggy-bank::before { content: ''; position: absolute; left: -15px; top: 60px; width: 20px; height: 40px; background-color: #e73c30; border-radius: 8px 0 0 8px; }
         .piggy-bank::after { content: ''; position: absolute; left: 35px; top: -12px; width: 25px; height: 30px; background-color: #e73c30; border-radius: 50% 50% 0 0; transform: rotate(-10deg); }
         .pig-eye { position: absolute; left: 25px; top: 45px; width: 10px; height: 10px; background-color: #fff; border-radius: 50%; }
         .pig-slot { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); width: 80px; height: 8px; background-color: #b71c1c; border-radius: 4px; }
-        .coin-aplus { width: 70px; height: 70px; background-color: #f7ca18; border: 4px solid #d4a307; border-radius: 50%; position: absolute; top: -100px; display: flex; justify-content: center; align-items: center; color: #d4a307; font-size: 28px; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.15); opacity: 0; z-index: 5; animation: dropCoin 1.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards; }
+        
+        .coin-aplus { 
+            width: 70px; height: 70px; background-color: #f7ca18; border: 4px solid #d4a307; border-radius: 50%; 
+            position: absolute; top: -100px; display: flex; justify-content: center; align-items: center; 
+            color: #d4a307; font-size: 28px; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+            opacity: 0; z-index: 5; animation: dropCoin 1.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards; 
+        }
 
         @keyframes dropCoin {
             0% { top: -100px; opacity: 1; transform: rotate(0deg); }
@@ -37,42 +43,28 @@
 
         /* --- 메인 콘텐츠 웹페이지 스타일 --- */
         #main-content {
-            opacity: 0; max-width: 900px; margin: 0 auto; padding: 80px 20px; text-align: center; transition: opacity 1.5s ease-in-out;
+            opacity: 0; max-width: 900px; margin: 0 auto; padding: 80px 20px; text-align: center; 
+            transition: opacity 1s ease-in-out;
         }
 
         h1 { font-size: 2.3rem; color: #2c3e50; margin-bottom: 50px; font-weight: 800; }
         
-        /* 비포 & 애프터 구역 레이아웃 */
         .section-block {
             background-color: #fff; border-radius: 20px; padding: 40px 30px; margin-bottom: 40px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); text-align: left;
         }
         
-        /* 타이틀 스타일 수정: 글자색을 차분한 다크 그레이로 변경 */
         .section-title { 
-            font-size: 1.6rem; 
-            font-weight: 800; 
-            color: #2c3e50; /* 어두운 회색/검정 계열 */
-            margin-bottom: 20px; 
-            display: flex; 
-            align-items: center; 
-            gap: 12px;
-            letter-spacing: 0.5px;
+            font-size: 1.6rem; font-weight: 800; color: #2c3e50; margin-bottom: 20px; 
+            display: flex; align-items: center; gap: 12px; letter-spacing: 0.5px;
         }
 
-        /* 이모지 대신 일정한 톤을 유지하기 위한 CSS 커스텀 붉은색 네모 포인트 */
         .square-icon {
-            width: 24px;
-            height: 24px;
-            background-color: #c0392b; /* 깔끔하고 톤다운된 붉은색 */
-            border-radius: 6px;
-            display: inline-block;
-            box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);
+            width: 24px; height: 24px; background-color: #c0392b; border-radius: 6px;
+            display: inline-block; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);
         }
 
         .section-desc { font-size: 1.1rem; line-height: 1.7; color: #555; margin-bottom: 25px; }
-
-        /* 비포 단일 이미지 스타일 */
         .before-img-box img { width: 100%; max-height: 450px; object-fit: cover; border-radius: 12px; }
 
         /* --- 애프터 슬라이드(Carousel) 스타일 --- */
@@ -117,7 +109,7 @@
                 대부분의 탑승객들은 대면하거나 소통하는 것을 어색해하며, 시선을 둘 곳을 찾지 못해 주로 스마트폰 화면만 바라보는 폐쇄적인 경향을 보입니다.
             </p>
             <div class="before-img-box">
-                <img src="before_photo.jpg" alt="Before 이미지">
+                <img src="before_photo.jpg" alt="Before 이미지 등록 대기 중">
             </div>
         </div>
 
@@ -131,12 +123,12 @@
             </p>
             
             <div class="slider-container">
-                <button class="slide-btn prev" onclick="moveSlide(-1)">&#10094;</button>
-                <button class="slide-btn next" onclick="moveSlide(1)">&#10095;</button>
+                <button class="slide-btn prev" id="prevBtn">&#10094;</button>
+                <button class="slide-btn next" id="nextBtn">&#10095;</button>
                 
                 <div class="slider-wrapper" id="sliderWrapper">
-                    <div class="slide-item"><img src="image_2ec81f.jpg" alt="After 이미지 1"></div>
-                    <div class="slide-item"><img src="after_photo2.jpg" alt="After 이미지 2"></div>
+                    <div class="slide-item"><img src="image_2ec81f.jpg" alt="After 저금통 시트지 설치 모습"></div>
+                    <div class="slide-item"><img src="after_photo2.jpg" alt="After 이미지 2 등록 대기 중"></div>
                     <div class="slide-item">
                         <video src="after_video.mp4" controls loop muted playsinline></video>
                     </div>
@@ -147,49 +139,20 @@
     </div>
 
     <script>
-        // 인트로 스크립트
+        // DOM 요소 정의
         const coin = document.getElementById('coin');
         const piggy = document.getElementById('piggy');
         const introContainer = document.getElementById('intro-container');
         const mainContent = document.getElementById('main-content');
-
-        coin.style.left = 'calc(50% - 35px)'; 
-        setTimeout(() => { piggy.style.animation = "bouncePig 0.4s ease-in-out forwards"; }, 1200);
-        setTimeout(() => {
-            introContainer.style.opacity = '0';
-            mainContent.style.opacity = '1';
-            setTimeout(() => { introContainer.style.display = 'none'; }, 1000);
-        }, 3200);
-
-        // 슬라이드 스크립트
         const wrapper = document.getElementById('sliderWrapper');
-        const slides = document.querySelectorAll('.slide-item');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
         const dotsContainer = document.getElementById('sliderDots');
-        let currentIdx = 0;
-        const totalSlides = slides.length;
 
-        slides.forEach((_, i) => {
-            const dot = document.createElement('div');
-            dot.classList.add('dot');
-            if(i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => { currentIdx = i; updateSlider(); });
-            dotsContainer.appendChild(dot);
-        });
+        // 코인 위치 세팅
+        coin.style.left = 'calc(50% - 35px)'; 
 
-        const dots = document.querySelectorAll('.dot');
-
-        function moveSlide(direction) {
-            currentIdx += direction;
-            if (currentIdx < 0) currentIdx = totalSlides - 1;
-            if (currentIdx >= totalSlides) currentIdx = 0;
-            updateSlider();
-        }
-
-        function updateSlider() {
-            wrapper.style.transform = `translateX(-${currentIdx * 100}%)`;
-            dots.forEach(dot => dot.classList.remove('active'));
-            dots[currentIdx].classList.add('active');
-        }
-    </script>
-</body>
-</html>
+        // 1. 코인 충돌 팅김 연출 (1.2초 뒤)
+        setTimeout(() => { 
+            if(piggy) piggy.style.animation = "bouncePig 0.4s ease-in-out forwards"; 
+        }, 120
