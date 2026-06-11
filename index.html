@@ -76,6 +76,40 @@
         .slider-dots { display: flex; justify-content: center; margin-top: 15px; gap: 8px; }
         .dot { width: 10px; height: 10px; background: #ccc; border-radius: 50%; cursor: pointer; transition: background 0.2s; }
         .dot.active { background: #e73c30; }
+        /* --- 배경에 떠다니는 코인 스타일 --- */
+        .bg-coin {
+            position: fixed;
+            background-color: rgba(247, 202, 24, 0.25); /* 본문 가독성을 위해 살짝 투명한 노란색으로 세팅 */
+            border: 2px solid rgba(212, 163, 7, 0.3);
+            border-radius: 50%;
+            color: rgba(212, 163, 7, 0.4);
+            font-weight: 900;
+            font-family: 'Helvetica', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none; /* 코인이 마우스 클릭을 방해하지 않도록 설정 */
+            z-index: -1; /* 본문 글씨 뒤로 가게 설정 */
+            animation: floatAround 12s linear infinite; /* 둥둥 떠다니는 애니메이션 */
+        }
+        
+        /* 코인이 부드럽게 위아래, 좌우로 흔들리며 회전하는 움직임 */
+        @keyframes floatAround {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(50px) rotate(360deg); /* 위로 둥실 가면서 사라짐 */
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -170,6 +204,45 @@
             dots.forEach(dot => dot.classList.remove('active'));
             dots[currentIdx].classList.add('active');
         }
+                // --- 배경에 A+ 코인을 자동으로 생성하는 함수 ---
+        function createBackgroundCoins() {
+            // 3초(인트로가 끝나는 시점) 후에 코인 생성을 시작합니다.
+            setTimeout(() => {
+                // 1.5초마다 새로운 코인을 화면 아래에서 하나씩 만들어냅니다.
+                setInterval(() => {
+                    const coin = document.createElement('div');
+                    coin.classList.add('bg-coin');
+                    coin.innerText = 'A+';
+        
+                    // 코인 크기 랜덤 설정 (30px ~ 60px 사이)
+                    const size = Math.random() * 30 + 30;
+                    coin.style.width = `${size}px`;
+                    coin.style.height = `${size}px`;
+                    coin.style.fontSize = `${size * 0.4}px`; // 크기에 맞춘 글자 크기
+        
+                    // 생성되는 시작 가로 위치 랜덤 설정 (화면 0% ~ 100% 사이)
+                    coin.style.left = `${Math.random() * 100}vw`;
+                    // 화면 맨 아래쪽에서 출발하도록 세팅
+                    coin.style.top = '100vh';
+        
+                    // 올라가는 속도(애니메이션 지속 시간) 랜덤 설정 (8초 ~ 16초 사이로 둥실둥실)
+                    const duration = Math.random() * 8 + 8;
+                    coin.style.animationDuration = `${duration}s`;
+        
+                    // 화면에 코인 추가
+                    document.body.appendChild(coin);
+        
+                    // 애니메이션이 끝나 화면 밖으로 완전히 나가면 코인 요소를 자동 삭제 (컴퓨터 느려짐 방지)
+                    setTimeout(() => {
+                        coin.remove();
+                    }, duration * 1000);
+        
+                }, 1500); // 숫자를 줄이면 코인이 더 자주, 많이 나옵니다!
+            }, 3000);
+        }
+        
+        // 함수 실행하기
+        createBackgroundCoins();
     </script>
 </body>
 </html>
