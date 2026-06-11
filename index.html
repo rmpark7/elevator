@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공간 프로토콜 프로젝트</title>
+    <title>Spatial Protocol Project</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: #f8f9fa; font-family: 'Pretendard', -apple-system, sans-serif; overflow-x: hidden; color: #333; }
@@ -40,17 +40,18 @@
             opacity: 0; max-width: 900px; margin: 0 auto; padding: 80px 20px; text-align: center; transition: opacity 1.5s ease-in-out;
         }
 
-        h1 { font-size: 2.5rem; color: #2c3e50; margin-bottom: 50px; font-weight: 800; }
+        h1 { font-size: 2.2rem; color: #2c3e50; margin-bottom: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; }
+        .project-sub-desc { font-size: 1.15rem; line-height: 1.7; color: #666; max-width: 750px; margin: 0 auto 50px auto; text-align: center; word-break: keep-all; }
         
         /* 비포 & 애프터 구역 레이아웃 */
         .section-block {
             background-color: #fff; border-radius: 20px; padding: 40px 30px; margin-bottom: 40px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); text-align: left;
         }
-        .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; }
-        .section-title.before { color: #495057; }
-        .section-title.after { color: #495057; }
-        .section-desc { font-size: 1.1rem; line-height: 1.7; color: #555; margin-bottom: 25px; }
+        .section-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; letter-spacing: -0.5px; }
+        .section-title.before { color: #e73c30; }
+        .section-title.after { color: #2c3e50; }
+        .section-desc { font-size: 1.05rem; line-height: 1.7; color: #555; margin-bottom: 25px; word-break: keep-all; }
 
         /* 비포 단일 이미지 스타일 */
         .before-img-box img { width: 100%; max-height: 450px; object-fit: cover; border-radius: 12px; }
@@ -76,10 +77,11 @@
         .slider-dots { display: flex; justify-content: center; margin-top: 15px; gap: 8px; }
         .dot { width: 10px; height: 10px; background: #ccc; border-radius: 50%; cursor: pointer; transition: background 0.2s; }
         .dot.active { background: #e73c30; }
+
         /* --- 배경에 떠다니는 코인 스타일 --- */
         .bg-coin {
             position: fixed;
-            background-color: rgba(247, 202, 24, 0.25); /* 본문 가독성을 위해 살짝 투명한 노란색으로 세팅 */
+            background-color: rgba(247, 202, 24, 0.25);
             border: 2px solid rgba(212, 163, 7, 0.3);
             border-radius: 50%;
             color: rgba(212, 163, 7, 0.4);
@@ -88,41 +90,29 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            pointer-events: none; /* 코인이 마우스 클릭을 방해하지 않도록 설정 */
-            z-index: -1; /* 본문 글씨 뒤로 가게 설정 */
-            animation: floatAround 12s linear infinite; /* 둥둥 떠다니는 애니메이션 */
+            pointer-events: none;
+            z-index: -1;
+            animation: floatAround 12s linear infinite;
         }
         
-        /* 코인이 부드럽게 위아래, 좌우로 흔들리며 회전하는 움직임 */
-        /* 코인이 위에서 아래로 떨어지며 흔들리는 움직임으로 수정 */
         @keyframes floatAround {
-            0% {
-                transform: translateY(0) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) translateX(50px) rotate(360deg); /* 100vh(화면 맨 아래)로 떨어지게 수정 */
-                opacity: 0;
-            }
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh) translateX(50px) rotate(360deg); opacity: 0; }
         }
+
         /* --- 🎮 미니 게임 스테이지 구역 스타일 --- */
         .game-stage {
             position: relative;
             width: 100%;
-            height: 400px; /* 게임 상자 높이 */
-            background-color: #2c3e50; /* 게임 창 배경색 (어두운 밤하늘) */
+            height: 400px;
+            background-color: #2c3e50;
             border-radius: 15px;
-            overflow: hidden; /* 상자 밖으로 나가는 코인 숨김 */
-            cursor: none; /* 게임 창 안에서는 마우스 커서를 숨기고 돼지로 대체 */
+            overflow: hidden;
+            cursor: none;
         }
         
-        /* 게임 상자 내부에서만 떨어지는 코인 */
         .game-coin {
             position: absolute;
             background-color: #f7ca18;
@@ -138,7 +128,6 @@
             z-index: 10;
         }
         
-        /* 게임 상자 하단에서 좌우로만 움직이는 미니 저금통 */
         #game-piggy {
             position: absolute;
             bottom: 15px;
@@ -163,7 +152,6 @@
         .g-pig-eye { position: absolute; left: 10px; top: 18px; width: 4px; height: 4px; background-color: #fff; border-radius: 50%; }
         .g-pig-slot { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 32px; height: 3px; background-color: #b71c1c; border-radius: 2px; }
         
-        /* 코인 획득 시 저금통이 팅기는 효과 */
         @keyframes catchBounce {
             0% { transform: translateX(-50%) scale(1); }
             50% { transform: translateX(-50%) scale(1.15, 0.85); }
@@ -174,39 +162,43 @@
             font-weight: 900;
             color: #f7ca18;
         }
+
         /* --- 🎉 수석 졸업 축하 팝업 스타일 --- */
         .congrats-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.85); /* 게임 화면을 어둡게 덮음 */
+            background-color: rgba(0, 0, 0, 0.85);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 100; /* 모든 코인과 저금통보다 위에 표시 */
+            z-index: 100;
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
-            pointer-events: auto; /* 팝업이 뜨면 게임 조작 차단 */
+            pointer-events: auto;
         }
         
         .congrats-box {
             text-align: center;
             color: #fff;
             animation: popUpEffect 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            padding: 0 20px;
         }
         
         .congrats-title {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 900;
-            color: #f7ca18; /* 황금빛 A+ 색상 */
-            margin-bottom: 10px;
+            color: #f7ca18;
+            margin-bottom: 12px;
             text-shadow: 0 0 15px rgba(247, 192, 24, 0.6);
+            word-break: keep-all;
         }
         
         .congrats-subtitle {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #fff;
+            word-break: keep-all;
         }
         
         @keyframes popUpEffect {
@@ -226,24 +218,26 @@
     </div>
 
     <div id="main-content">
-        <h1>투명 엘리베이터 시선 유도 프로토콜</h1>
+        <h1>Spatial Protocol Project</h1>
+        <p class="project-sub-desc">
+            An interactive space design experiment that disrupts the assumptions of everyday environments and introduces unexpected gestures to engage and redirect people's attention.
+        </p>
 
         <div class="section-block">
-            <div class="section-title before"> BEFORE</div>
+            <div class="section-title before">BEFORE: Inside the Glass Elevator Before the Protocol</div>
             <p class="section-desc">
-                프로토콜 적용 전의 투명 엘리베이터 내부 모습입니다. <br>
-                대부분의 탑승객들은 대면하거나 소통하는 것을 어색해하며, 시선을 둘 곳을 찾지 못해 주로 스마트폰 화면만 바라보는 폐쇄적인 경향을 보입니다.
+                Most passengers experience social awkwardness and a lack of visual direction. To avoid face-to-face interaction or communication, they tend to adopt a closed posture, keeping their eyes glued to their smartphone screens.
             </p>
             <div class="before-img-box">
-                <img src="before_photo.jpg" alt="Before 이미지">
+                <img src="before_photo.jpg" alt="Before Image">
             </div>
         </div>
 
         <div class="section-block">
-            <div class="section-title after"> AFTER</div>
+            <div class="section-title after">AFTER: Disrupting Spatial Assumptions</div>
             <p class="section-desc">
-                기존의 공간 가설을 비틀고 '제스처 프로토콜'을 삽입한 뒤의 모습입니다. <br>
-                엘리베이터 유리에 부착된 빨간 돼지 저금통과 A+ 코인 디자인이 탑승객들에게 신선한 자극과 재미를 줍니다. 사람들의 시선이 위에서 아래로 움직이며 자연스럽게 이목을 집중시키는 인터랙티브한 공간으로 변화했습니다.
+                This is the space after dismantling conventional spatial norms and introducing the "Gesture Protocol."<br>
+                The dynamic design of the red piggy bank and the "A+ Coins" applied to the elevator glass provides passengers with a fresh sense of stimulation and delight. The environment transforms into an interactive space where people’s eyes naturally follow the movement of the elevator, effectively drawing everyone's focus.
             </p>
             
             <div class="slider-container">
@@ -251,8 +245,8 @@
                 <button class="slide-btn next" onclick="moveSlide(1)">&#10095;</button>
                 
                 <div class="slider-wrapper" id="sliderWrapper">
-                    <div class="slide-item"><img src="image_2ec81f.jpg" alt="After 이미지 1"></div>
-                    <div class="slide-item"><img src="after_photo2.jpg" alt="After 이미지 2"></div>
+                    <div class="slide-item"><img src="image_2ec81f.jpg" alt="After Image 1"></div>
+                    <div class="slide-item"><img src="after_photo2.jpg" alt="After Image 2"></div>
                     <div class="slide-item">
                         <video src="after_video.mp4" controls loop muted playsinline></video>
                     </div>
@@ -260,13 +254,14 @@
             </div>
             <div class="slider-dots" id="sliderDots"></div>
         </div>
-    </div>
+
         <div class="section-block">
-            <div class="section-title">
-                <span class="square-icon"></span> BONUS MINI GAME
-            </div>
+            <div class="section-title">BONUS MINI GAME</div>
             <p class="section-desc">
-                마우스를 아래 상자 안에서 움직여 돼지 저금통을 조종해 보세요! 하늘에서 떨어지는 A+ 코인을 받아 내 학점을 채울 수 있습니다. (현재 내 학점: <span id="game-score-val" class="score-inline">0.0</span> / 4.5)
+                Move your mouse inside the box below to control the piggy bank! Catch the falling A+ Coins from the sky to boost your GPA. (Current GPA: <span id="game-score-val" class="score-inline">0.0</span> / 4.5)
+            </p>
+            <p class="section-desc" style="font-weight: bold; color: #e73c30; margin-top: -15px; margin-bottom: 20px;">
+                Good luck to everyone who spots the A+ Coins! Catch those A+ Coins! 🪙
             </p>
             
             <div class="game-stage" id="gameStage">
@@ -276,19 +271,30 @@
                 </div>
             </div>
         </div>
+    </div>
+
     <script>
-        // --- 인트로 스크립트 ---
+        // --- 인트로 스크립트 (오류 수정 완료) ---
         const coin = document.getElementById('coin');
         const piggy = document.getElementById('piggy');
         const introContainer = document.getElementById('intro-container');
         const mainContent = document.getElementById('main-content');
 
-        coin.style.left = 'calc(50% - 35px)'; 
-        setTimeout(() => { piggy.style.animation = "bouncePig 0.4s ease-in-out forwards"; }, 1200);
+        // DOM 요소가 확실히 준비된 후 안전하게 위치 세팅 및 실행
+        if (coin) {
+            coin.style.left = 'calc(50% - 35px)'; 
+        }
+        
+        setTimeout(() => { 
+            if (piggy) piggy.style.animation = "bouncePig 0.4s ease-in-out forwards"; 
+        }, 1200);
+
         setTimeout(() => {
-            introContainer.style.opacity = '0';
-            mainContent.style.opacity = '1';
-            setTimeout(() => { introContainer.style.display = 'none'; }, 1000);
+            if (introContainer && mainContent) {
+                introContainer.style.opacity = '0';
+                mainContent.style.opacity = '1';
+                setTimeout(() => { introContainer.style.display = 'none'; }, 1000);
+            }
         }, 3200);
 
         // --- 슬라이드(Carousel) 스크립트 ---
@@ -298,16 +304,15 @@
         let currentIdx = 0;
         const totalSlides = slides.length;
 
-        // 슬라이드 개수에 맞게 점(Dot) 자동 생성
-        slides.forEach((_, i) => {
-            const dot = document.createElement('div');
-            dot.classList.add('dot');
-            if(i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => { currentIdx = i; updateSlider(); });
-            dotsContainer.appendChild(dot);
-        });
-
-        const dots = document.querySelectorAll('.dot');
+        if (dotsContainer && slides.length > 0) {
+            slides.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if(i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => { currentIdx = i; updateSlider(); });
+                dotsContainer.appendChild(dot);
+            });
+        }
 
         function moveSlide(direction) {
             currentIdx += direction;
@@ -317,69 +322,61 @@
         }
 
         function updateSlider() {
-            wrapper.style.transform = `translateX(-${currentIdx * 100}%)`;
+            const dots = document.querySelectorAll('.dot');
+            if (wrapper) wrapper.style.transform = `translateX(-${currentIdx * 100}%)`;
             dots.forEach(dot => dot.classList.remove('active'));
-            dots[currentIdx].classList.add('active');
+            if (dots[currentIdx]) dots[currentIdx].classList.add('active');
         }
-                // --- 배경에 A+ 코인을 자동으로 생성하는 함수 ---
+
+        // --- 배경에 A+ 코인을 자동으로 생성하는 함수 ---
         function createBackgroundCoins() {
-            // 3초(인트로가 끝나는 시점) 후에 코인 생성을 시작합니다.
             setTimeout(() => {
-                // 1.5초마다 새로운 코인을 화면 아래에서 하나씩 만들어냅니다.
                 setInterval(() => {
-                    const coin = document.createElement('div');
-                    coin.classList.add('bg-coin');
-                    coin.innerText = 'A+';
+                    const bgCoin = document.createElement('div');
+                    bgCoin.classList.add('bg-coin');
+                    bgCoin.innerText = 'A+';
         
-                    // 코인 크기 랜덤 설정 (30px ~ 60px 사이)
                     const size = Math.random() * 30 + 30;
-                    coin.style.width = `${size}px`;
-                    coin.style.height = `${size}px`;
-                    coin.style.fontSize = `${size * 0.4}px`; // 크기에 맞춘 글자 크기
+                    bgCoin.style.width = `${size}px`;
+                    bgCoin.style.height = `${size}px`;
+                    bgCoin.style.fontSize = `${size * 0.4}px`;
         
-                    // 생성되는 시작 가로 위치 랜덤 설정 (화면 0% ~ 100% 사이)
-                    coin.style.left = `${Math.random() * 100}vw`;
-                    // 화면 위쪽에서 출발하도록 세팅
-                    coin.style.top = '-50px';
+                    bgCoin.style.left = `${Math.random() * 100}vw`;
+                    bgCoin.style.top = '-50px';
         
-                    // 올라가는 속도(애니메이션 지속 시간) 랜덤 설정 (8초 ~ 16초 사이로 둥실둥실)
                     const duration = Math.random() * 8 + 8;
-                    coin.style.animationDuration = `${duration}s`;
+                    bgCoin.style.animationDuration = `${duration}s`;
         
-                    // 화면에 코인 추가
-                    document.body.appendChild(coin);
+                    document.body.appendChild(bgCoin);
         
-                    // 애니메이션이 끝나 화면 밖으로 완전히 나가면 코인 요소를 자동 삭제 (컴퓨터 느려짐 방지)
                     setTimeout(() => {
-                        coin.remove();
+                        bgCoin.remove();
                     }, duration * 1000);
         
-                }, 1500); // 숫자를 줄이면 코인이 더 자주, 많이 나옵니다!
+                }, 1500);
             }, 3000);
         }
         
-        // 함수 실행하기
         createBackgroundCoins();
-        // --- 🎮 독립형 미니 게임 스크립트 구역 (기존 자바스크립트 아래에 추가) ---
+
+        // --- 🎮 독립형 미니 게임 스크립트 구역 ---
         const stage = document.getElementById('gameStage');
         const gPiggy = document.getElementById('game-piggy');
         const gScoreVal = document.getElementById('game-score-val');
         let score = 0;
+        let gameIntervalId = null; // 게임 루프 타이머 관리자
         
-        // 1. 게임 창 안에서 마우스가 움직일 때만 돼지 저금통이 마우스를 따라 좌우로 움직임
         if (stage && gPiggy) {
             stage.addEventListener('mousemove', (e) => {
                 const stageRect = stage.getBoundingClientRect();
                 let relativeX = e.clientX - stageRect.left;
                 
-                // 저금통이 박스 좌우 벽 밖으로 튀어나가지 않도록 조절
                 if (relativeX < 40) relativeX = 40;
                 if (relativeX > stageRect.width - 40) relativeX = stageRect.width - 40;
         
                 gPiggy.style.left = `${relativeX}px`;
             });
         
-            // 모바일/태블릿 터치 조종 대응
             stage.addEventListener('touchmove', (e) => {
                 const stageRect = stage.getBoundingClientRect();
                 let relativeX = e.touches[0].clientX - stageRect.left;
@@ -391,41 +388,36 @@
             });
         }
         
-        // 2. 게임 전용 코인을 상자 내부 상단에서 무작위로 떨어뜨리는 함수
         function spawnGameCoin() {
             if (!stage || !gPiggy) return;
         
-            setInterval(() => {
+            gameIntervalId = setInterval(() => {
                 const coinEl = document.createElement('div');
                 coinEl.classList.add('game-coin');
                 coinEl.innerText = 'A+';
         
-                // 코인 크기 고정
                 const size = 40;
                 coinEl.style.width = `${size}px`;
                 coinEl.style.height = `${size}px`;
                 coinEl.style.fontSize = '15px';
         
-                // 게임 상자 가로 폭 안에서 랜덤한 가로 위치 세팅
                 const maxLeft = stage.clientWidth - size;
                 coinEl.style.left = `${Math.random() * maxLeft}px`;
-                coinEl.style.top = '-40px'; // 상자 맨 위 가려진 부분에서 출발
+                coinEl.style.top = '-40px';
         
                 stage.appendChild(coinEl);
         
                 let currentTop = -40;
-                const speed = Math.random() * 2 + 3; // 코인이 아래로 떨어지는 프레임당 속도 (3~5px)
+                const speed = Math.random() * 2 + 3;
         
-                // 코인 하강 및 실시간 충돌 검사 타이머 루프
                 const moveLoop = setInterval(() => {
                     currentTop += speed;
                     coinEl.style.top = `${currentTop}px`;
         
-                    // 코인과 저금통의 화면상 절대 좌표 실시간 계산
                     const coinRect = coinEl.getBoundingClientRect();
                     const pigRect = gPiggy.getBoundingClientRect();
         
-                    // 3. 충돌 판정 (저금통 위로 코인을 받아먹었을 때)
+                    // 충돌 판정 및 점수 계산 변경
                     if (
                         coinRect.bottom >= pigRect.top &&
                         coinRect.top <= pigRect.bottom &&
@@ -436,16 +428,13 @@
                         let grade = (score * 0.1).toFixed(1);
                         
                         if (score >= 45) {
-                            grade = "4.5 (수석 졸업! 🎉)";
+                            grade = "4.5 (Top Honors! 🎉)";
                             if (gScoreVal) gScoreVal.innerText = grade;
-                        
-                            // 🏆 4.5만점 달성 시 게임 종료 함수 실행!
                             endGameWithHonors(); 
                         } else {
                             if (gScoreVal) gScoreVal.innerText = grade;
                         }
         
-                        // 코인을 먹을 때 저금통이 통통 튀는 애니메이션 작동
                         gPiggy.style.animation = 'none';
                         setTimeout(() => { gPiggy.style.animation = 'catchBounce 0.2s ease-in-out'; }, 10);
         
@@ -453,56 +442,50 @@
                         clearInterval(moveLoop);
                     }
         
-                    // 받아먹지 못하고 상자 바닥으로 떨어진 코인 삭제
                     if (currentTop > stage.clientHeight) {
                         coinEl.remove();
                         clearInterval(moveLoop);
                     }
                 }, 20);
         
-            }, 900); // 0.9초마다 새로운 코인 투하
+            }, 900);
         }
         
-        // 4. 최초 인트로 오프닝 연출(3.2초)이 완벽히 끝난 후 게임 엔진 가동
         setTimeout(() => {
             spawnGameCoin();
         }, 3200);
-        // --- 🏆 수석 졸업 시 게임을 멈추고 축하 문구를 띄우는 함수 ---
+
+        // --- 🏆 수석 졸업 시 게임 정지 및 영어 축하문구 팝업 함수 ---
         function endGameWithHonors() {
-            // 1. 새로운 코인이 생성되는 타이머를 전부 찾아내서 파괴 (더 이상 코인이 안 떨어짐)
-            // 브라우저의 모든 Interval 루프를 강제로 종료시킵니다.
-            let id = window.setInterval(function {}, 0);
-            while (id--) {
-                window.clearInterval(id);
+            // 1. 새로운 코인 생성 인터벌 완벽 제거
+            if (gameIntervalId) {
+                clearInterval(gameIntervalId);
             }
         
-            // 2. 현재 화면에 남아 움직이던 코인들을 모두 찾아서 즉시 제거
+            // 2. 화면에 남아 부유하는 코인 삭제 루프 강제 해제 및 청소
             const remainingCoins = document.querySelectorAll('.game-coin');
             remainingCoins.forEach(c => c.remove());
         
-            // 3. 게임 스테이지 안에서 마우스를 움직여도 저금통이 움직이지 않도록 조작 제어 및 커서 복구
+            // 3. 저금통 컨트롤 비활성화 및 마우스 원상 복구
             if (stage) {
-                stage.style.cursor = 'default'; // 숨겼던 마우스 커서 다시 보여주기
-                // 기존 마우스 움직임 이벤트를 무력화하기 위해 투명한 벽을 세우거나 이벤트를 덮어씌웁니다.
+                stage.style.cursor = 'default';
                 stage.addEventListener('mousemove', (e) => { e.stopPropagation(); }, true);
                 stage.addEventListener('touchmove', (e) => { e.stopPropagation(); }, true);
             }
         
-            // 4. 게임 화면 중앙에 띄울 축하 팝업 뼈대(HTML) 동적 생성
+            // 4. 영어 축하 문구 구조 생성
             const overlay = document.createElement('div');
             overlay.classList.add('congrats-overlay');
             
             overlay.innerHTML = `
                 <div class="congrats-box">
-                    <div class="congrats-title">🎉 수석 졸업을 축하합니다! 🎉</div>
-                    <div class="congrats-subtitle">공간 가설 프로토콜 마스터 (4.5 / 4.5)</div>
+                    <div class="congrats-title">🎉 Graduation with Top Honors! 🎉</div>
+                    <div class="congrats-subtitle">Spatial Hypothesis Protocol Master (4.5 / 4.5)</div>
                 </div>
             `;
         
-            // 5. 게임 스테이지 내부에 팝업 추가 후 부드럽게 나타나기
             if (stage) {
                 stage.appendChild(overlay);
-                // 브라우저가 스타일 변화를 인지하도록 살짝 유포 후 투명도 활성화
                 setTimeout(() => {
                     overlay.style.opacity = '1';
                 }, 50);
