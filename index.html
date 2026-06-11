@@ -5,136 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공간 프로토콜 프로젝트</title>
     <style>
-        /* 기본 스타일 리셋 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background-color: #f5f6fa;
-            font-family: 'Pretendard', -apple-system, sans-serif;
-            overflow-x: hidden;
-            color: #333;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #f8f9fa; font-family: 'Pretendard', -apple-system, sans-serif; overflow-x: hidden; color: #333; }
 
-        /* 인트로 컨테이너: 투명 블러 배경 */
+        /* --- 인트로 애니메이션 스타일 --- */
         #intro-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: linear-gradient(135deg, rgba(230, 240, 245, 0.6), rgba(200, 220, 230, 0.4));
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
-            padding-bottom: 120px;
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            z-index: 1000; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 120px;
             transition: opacity 1s ease-out;
         }
+        .piggy-bank { width: 200px; height: 150px; background-color: #e73c30; border-radius: 80px 90px 80px 80px; position: relative; z-index: 10; box-shadow: 0 10px 25px rgba(231, 60, 48, 0.3); transition: transform 0.1s ease; }
+        .piggy-bank::before { content: ''; position: absolute; left: -15px; top: 60px; width: 20px; height: 40px; background-color: #e73c30; border-radius: 8px 0 0 8px; }
+        .piggy-bank::after { content: ''; position: absolute; left: 35px; top: -12px; width: 25px; height: 30px; background-color: #e73c30; border-radius: 50% 50% 0 0; transform: rotate(-10deg); }
+        .pig-eye { position: absolute; left: 25px; top: 45px; width: 10px; height: 10px; background-color: #fff; border-radius: 50%; }
+        .pig-slot { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); width: 80px; height: 8px; background-color: #b71c1c; border-radius: 4px; }
+        .coin-aplus { width: 70px; height: 70px; background-color: #f7ca18; border: 4px solid #d4a307; border-radius: 50%; position: absolute; top: -100px; display: flex; justify-content: center; align-items: center; color: #d4a307; font-size: 28px; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.15); opacity: 0; z-index: 5; animation: dropCoin 1.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards; }
 
-        /* 실제 설치 형태를 반영한 빨간 돼지 저금통 */
-        .piggy-bank {
-            width: 220px;
-            height: 170px;
-            background-color: #e73c30; /* 강렬한 레드 */
-            border-radius: 90px 100px 90px 90px;
-            position: relative;
-            z-index: 10;
-            box-shadow: 0 10px 25px rgba(231, 60, 48, 0.3);
-            transition: transform 0.1s ease;
-        }
-        /* 돼지 코 부분 */
-        .piggy-bank::before {
-            content: '';
-            position: absolute;
-            left: -15px;
-            top: 65px;
-            width: 20px;
-            height: 45px;
-            background-color: #e73c30;
-            border-radius: 8px 0 0 8px;
-        }
-        /* 돼지 귀 부분 */
-        .piggy-bank::after {
-            content: '';
-            position: absolute;
-            left: 40px;
-            top: -15px;
-            width: 30px;
-            height: 35px;
-            background-color: #e73c30;
-            border-radius: 50% 50% 0 0;
-            transform: rotate(-10deg);
-        }
-        /* 돼지 눈 */
-        .pig-eye {
-            position: absolute;
-            left: 25px;
-            top: 50px;
-            width: 12px;
-            height: 12px;
-            background-color: #fff;
-            border-radius: 50%;
-        }
-        /* 저금통 투입구 슬롯 */
-        .pig-slot {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            height: 8px;
-            background-color: #b71c1c;
-            border-radius: 4px;
-        }
-
-        /* A+ 노란색 코인 구현 */
-        .coin-aplus {
-            width: 75px;
-            height: 75px;
-            background-color: #f7ca18;
-            border: 4px solid #d4a307;
-            border-radius: 50%;
-            position: absolute;
-            top: -100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #d4a307;
-            font-size: 30px;
-            font-weight: 900;
-            font-family: 'Helvetica', sans-serif;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            opacity: 0;
-            z-index: 5;
-            animation: dropCoin 1.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
-        }
-
-        /* 코인 추락 애니메이션 */
         @keyframes dropCoin {
-            0% {
-                top: -100px;
-                opacity: 1;
-                transform: rotate(0deg);
-            }
-            85% {
-                top: calc(100vh - 315px); /* 돼지 저금통 투입구 바로 위 */
-                opacity: 1;
-                transform: rotate(360deg);
-            }
-            100% {
-                top: calc(100vh - 240px); /* 돼지 안으로 완전히 빨려 들어감 */
-                opacity: 0;
-                transform: rotate(400deg) scale(0.6);
-            }
+            0% { top: -100px; opacity: 1; transform: rotate(0deg); }
+            85% { top: calc(100vh - 295px); opacity: 1; transform: rotate(360deg); }
+            100% { top: calc(100vh - 230px); opacity: 0; transform: rotate(400deg) scale(0.6); }
         }
-
-        /* 코인이 부딪혔을 때 돼지가 반응하는 팅김 효과 */
         @keyframes bouncePig {
             0% { transform: scale(1); }
             40% { transform: scale(1.1, 0.9) translateY(5px); }
@@ -142,34 +35,53 @@
             100% { transform: scale(1) translateY(0); }
         }
 
-        /* 메인 콘텐츠 스타일 (인트로 완료 후 서서히 등장) */
+        /* --- 메인 콘텐츠 웹페이지 스타일 --- */
         #main-content {
-            opacity: 0;
-            padding: 60px 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-            transition: opacity 1.5s ease-in-out;
+            opacity: 0; max-width: 900px; margin: 0 auto; padding: 80px 20px; text-align: center; transition: opacity 1.5s ease-in-out;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #2c3e50;
+        h1 { font-size: 2.5rem; color: #2c3e50; margin-bottom: 50px; font-weight: 800; }
+        
+        /* 비포 & 애프터 구역 레이아웃 */
+        .section-block {
+            background-color: #fff; border-radius: 20px; padding: 40px 30px; margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); text-align: left;
         }
+        .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; }
+        .section-title.before { color: #7f8c8d; }
+        .section-title.after { color: #e73c30; }
+        .section-desc { font-size: 1.1rem; line-height: 1.7; color: #555; margin-bottom: 25px; }
 
-        .project-desc {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            color: #7f8c8d;
+        /* 비포 단일 이미지 스타일 */
+        .before-img-box img { width: 100%; max-height: 450px; object-fit: cover; border-radius: 12px; }
+
+        /* --- 애프터 슬라이드(Carousel) 스타일 --- */
+        .slider-container { position: relative; width: 100%; max-width: 100%; margin: 0 auto; overflow: hidden; border-radius: 12px; }
+        .slider-wrapper { display: flex; transition: transform 0.4s ease-in-out; width: 100%; }
+        
+        /* 슬라이드 내부의 개별 카드 (사진 또는 동영상) */
+        .slide-item { min-width: 100%; width: 100%; display: flex; justify-content: center; align-items: center; background: #000; }
+        .slide-item img, .slide-item video { width: 100%; max-height: 500px; object-fit: contain; vertical-align: middle; }
+
+        /* 슬라이드 좌우 이동 버튼 */
+        .slide-btn {
+            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: #fff;
+            border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 20px; cursor: pointer; z-index: 10; transition: background 0.2s;
         }
+        .slide-btn:hover { background: rgba(0, 0, 0, 0.8); }
+        .slide-btn.prev { left: 15px; }
+        .slide-btn.next { right: 15px; }
+
+        /* 슬라이드 하단 인디케이터 (점) */
+        .slider-dots { display: flex; justify-content: center; margin-top: 15px; gap: 8px; }
+        .dot { width: 10px; height: 10px; background: #ccc; border-radius: 50%; cursor: pointer; transition: background 0.2s; }
+        .dot.active { background: #e73c30; }
     </style>
 </head>
 <body>
 
     <div id="intro-container">
         <div class="coin-aplus" id="coin">A+</div>
-        
         <div class="piggy-bank" id="piggy">
             <div class="pig-slot"></div>
             <div class="pig-eye"></div>
@@ -178,35 +90,86 @@
 
     <div id="main-content">
         <h1>투명 엘리베이터 시선 유도 프로토콜</h1>
-        <p class="project-desc">
-            일상 공간의 가설을 비틀고 낯선 제스처를 삽입하여<br>
-            사람들의 시선을 인터랙트하는 공간 디자인 실험 프로젝트입니다.
-        </p>
+
+        <div class="section-block">
+            <div class="section-title before">🟥 BEFORE</div>
+            <p class="section-desc">
+                프로토콜 적용 전의 투명 엘리베이터 내부 모습입니다. <br>
+                대부분의 탑승객들은 대면하거나 소통하는 것을 어색해하며, 시선을 둘 곳을 찾지 못해 주로 스마트폰 화면만 바라보는 폐쇄적인 경향을 보입니다.
+            </p>
+            <div class="before-img-box">
+                <img src="before_photo.jpg" alt="Before 이미지">
+            </div>
+        </div>
+
+        <div class="section-block">
+            <div class="section-title after">🟩 AFTER</div>
+            <p class="section-desc">
+                기존의 공간 가설을 비틀고 '제스처 프로토콜'을 삽입한 뒤의 모습입니다. <br>
+                엘리베이터 유리에 부착된 빨간 돼지 저금통과 A+ 코인 디자인이 탑승객들에게 신선한 자극과 재미를 줍니다. 사람들의 시선이 위에서 아래로 움직이며 자연스럽게 이목을 집중시키는 인터랙티브한 공간으로 변화했습니다.
+            </p>
+            
+            <div class="slider-container">
+                <button class="slide-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+                <button class="slide-btn next" onclick="moveSlide(1)">&#10095;</button>
+                
+                <div class="slider-wrapper" id="sliderWrapper">
+                    <div class="slide-item"><img src="image_2ec81f.jpg" alt="After 이미지 1"></div>
+                    <div class="slide-item"><img src="after_photo2.jpg" alt="After 이미지 2"></div>
+                    <div class="slide-item">
+                        <video src="after_video.mp4" controls loop muted playsinline></video>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-dots" id="sliderDots"></div>
+        </div>
     </div>
 
     <script>
+        // --- 인트로 스크립트 ---
         const coin = document.getElementById('coin');
         const piggy = document.getElementById('piggy');
         const introContainer = document.getElementById('intro-container');
         const mainContent = document.getElementById('main-content');
 
-        // 코인의 가로 위치를 화면 중앙으로 세팅
-        coin.style.left = 'calc(50% - 37.5px)'; 
-
-        // 코인이 돼지 저금통에 도달하는 타이밍에 맞춰 팅김 애니메이션 실행
-        setTimeout(() => {
-            piggy.style.animation = "bouncePig 0.4s ease-in-out forwards";
-        }, 1200);
-
-        // 인트로가 끝나고 메인 페이지로 부드럽게 전환
+        coin.style.left = 'calc(50% - 35px)'; 
+        setTimeout(() => { piggy.style.animation = "bouncePig 0.4s ease-in-out forwards"; }, 1200);
         setTimeout(() => {
             introContainer.style.opacity = '0';
             mainContent.style.opacity = '1';
-
-            setTimeout(() => {
-                introContainer.style.display = 'none';
-            }, 1000);
+            setTimeout(() => { introContainer.style.display = 'none'; }, 1000);
         }, 3200);
+
+        // --- 슬라이드(Carousel) 스크립트 ---
+        const wrapper = document.getElementById('sliderWrapper');
+        const slides = document.querySelectorAll('.slide-item');
+        const dotsContainer = document.getElementById('sliderDots');
+        let currentIdx = 0;
+        const totalSlides = slides.length;
+
+        // 슬라이드 개수에 맞게 점(Dot) 자동 생성
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if(i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => { currentIdx = i; updateSlider(); });
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function moveSlide(direction) {
+            currentIdx += direction;
+            if (currentIdx < 0) currentIdx = totalSlides - 1;
+            if (currentIdx >= totalSlides) currentIdx = 0;
+            updateSlider();
+        }
+
+        function updateSlider() {
+            wrapper.style.transform = `translateX(-${currentIdx * 100}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[currentIdx].classList.add('active');
+        }
     </script>
 </body>
 </html>
