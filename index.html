@@ -94,6 +94,7 @@
         }
         
         /* 코인이 부드럽게 위아래, 좌우로 흔들리며 회전하는 움직임 */
+        /* 코인이 위에서 아래로 떨어지며 흔들리는 움직임으로 수정 */
         @keyframes floatAround {
             0% {
                 transform: translateY(0) translateX(0) rotate(0deg);
@@ -106,7 +107,7 @@
                 opacity: 1;
             }
             100% {
-                transform: translateY(-100vh) translateX(50px) rotate(360deg); /* 위로 둥실 가면서 사라짐 */
+                transform: translateY(100vh) translateX(50px) rotate(360deg); /* 100vh(화면 맨 아래)로 떨어지게 수정 */
                 opacity: 0;
             }
         }
@@ -126,7 +127,7 @@
         <h1>투명 엘리베이터 시선 유도 프로토콜</h1>
 
         <div class="section-block">
-            <div class="section-title before">🟥 BEFORE</div>
+            <div class="section-title before"> BEFORE</div>
             <p class="section-desc">
                 프로토콜 적용 전의 투명 엘리베이터 내부 모습입니다. <br>
                 대부분의 탑승객들은 대면하거나 소통하는 것을 어색해하며, 시선을 둘 곳을 찾지 못해 주로 스마트폰 화면만 바라보는 폐쇄적인 경향을 보입니다.
@@ -137,7 +138,7 @@
         </div>
 
         <div class="section-block">
-            <div class="section-title after">🟥 AFTER</div>
+            <div class="section-title after"> AFTER</div>
             <p class="section-desc">
                 기존의 공간 가설을 비틀고 '제스처 프로토콜'을 삽입한 뒤의 모습입니다. <br>
                 엘리베이터 유리에 부착된 빨간 돼지 저금통과 A+ 코인 디자인이 탑승객들에게 신선한 자극과 재미를 줍니다. 사람들의 시선이 위에서 아래로 움직이며 자연스럽게 이목을 집중시키는 인터랙티브한 공간으로 변화했습니다.
@@ -222,8 +223,8 @@
         
                     // 생성되는 시작 가로 위치 랜덤 설정 (화면 0% ~ 100% 사이)
                     coin.style.left = `${Math.random() * 100}vw`;
-                    // 화면 맨 아래쪽에서 출발하도록 세팅
-                    coin.style.top = '100vh';
+                    // 화면 위쪽에서 출발하도록 세팅
+                    coin.style.top = '-50px';
         
                     // 올라가는 속도(애니메이션 지속 시간) 랜덤 설정 (8초 ~ 16초 사이로 둥실둥실)
                     const duration = Math.random() * 8 + 8;
