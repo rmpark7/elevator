@@ -328,7 +328,7 @@
                 gameDesc: "마우스를 아래 상자 안에서 움직여 돼지 저금통을 조종해 보세요! 하늘에서 떨어지는 A+ 코인을 받아 내 학점을 채울 수 있습니다. (현재 내 학점: <span id='game-score-val' class='score-inline'>0.0</span> / 4.5)",
                 gameWish: "A+코인을 발견한 여러분에게 행운이 있을 것입니다~ 유후 🪙",
                 popTitle: "🎉 수석 졸업을 축하합니다! 🎉",
-                popSub: "공간 가설 프로토콜 마스터 (4.5 / 4.5)"
+                popSub: "공간 가설 프로토콜 마스터 (4.3 / 4.3)"
             },
             en: {
                 mainTitle: "Spatial Protocol Project",
@@ -341,7 +341,7 @@
                 gameDesc: "Move your mouse inside the box below to control the piggy bank! Catch the falling A+ Coins from the sky to boost your GPA. (Current GPA: <span id='game-score-val' class='score-inline'>0.0</span> / 4.5)",
                 gameWish: "Good luck to everyone who spots the A+ Coins! Catch those A+ Coins! 🪙",
                 popTitle: "🎉 Graduation with Top Honors! 🎉",
-                popSub: "Spatial Hypothesis Protocol Master (4.5 / 4.5)"
+                popSub: "Spatial Hypothesis Protocol Master (4.3 / 4.3)"
             }
         };
 
@@ -365,7 +365,7 @@
                 
                 let currentGrade = (score * 0.1).toFixed(1);
                 if (score >= 45) {
-                    currentGrade = lang === 'ko' ? "4.5 (수석 졸업! 🎉)" : "4.5 (Top Honors! 🎉)";
+                    currentGrade = lang === 'ko' ? "4.3 (수석 졸업! 🎉)" : "4.3 (Top Honors! 🎉)";
                 }
                 const scoreBubble = document.getElementById('game-score-val');
                 if (scoreBubble) scoreBubble.innerText = currentGrade;
@@ -524,8 +524,8 @@
                         score += 1;
                         let grade = (score * 0.1).toFixed(1);
                         
-                        if (score >= 45) {
-                            grade = currentLang === 'ko' ? "4.5 (수석 졸업! 🎉)" : "4.5 (Top Honors! 🎉)";
+                        if (score >= 43) {
+                            grade = currentLang === 'ko' ? "4.3 (수석 졸업! 🎉)" : "4.3 (Top Honors! 🎉)";
                             const scoreBubble = document.getElementById('game-score-val');
                             if (scoreBubble) scoreBubble.innerText = grade;
                             endGameWithHonors(); 
