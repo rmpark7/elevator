@@ -111,6 +111,69 @@
                 opacity: 0;
             }
         }
+        /* --- 🎮 미니 게임 스테이지 구역 스타일 --- */
+        .game-stage {
+            position: relative;
+            width: 100%;
+            height: 400px; /* 게임 상자 높이 */
+            background-color: #2c3e50; /* 게임 창 배경색 (어두운 밤하늘) */
+            border-radius: 15px;
+            overflow: hidden; /* 상자 밖으로 나가는 코인 숨김 */
+            cursor: none; /* 게임 창 안에서는 마우스 커서를 숨기고 돼지로 대체 */
+        }
+        
+        /* 게임 상자 내부에서만 떨어지는 코인 */
+        .game-coin {
+            position: absolute;
+            background-color: #f7ca18;
+            border: 2px solid #d4a307;
+            border-radius: 50%;
+            color: #d4a307;
+            font-weight: 900;
+            font-family: 'Helvetica', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        /* 게임 상자 하단에서 좌우로만 움직이는 미니 저금통 */
+        #game-piggy {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 60px;
+            background-color: #e73c30;
+            border-radius: 32px 36px 32px 32px;
+            z-index: 20;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+        #game-piggy::before {
+            content: ''; position: absolute; left: -6px; top: 24px; width: 8px; height: 16px;
+            background-color: #e73c30; border-radius: 3px 0 0 3px;
+        }
+        #game-piggy::after {
+            content: ''; position: absolute; left: 14px; top: -5px; width: 10px; height: 12px;
+            background-color: #e73c30; border-radius: 50% 50% 0 0; transform: rotate(-10deg);
+        }
+        .g-pig-eye { position: absolute; left: 10px; top: 18px; width: 4px; height: 4px; background-color: #fff; border-radius: 50%; }
+        .g-pig-slot { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 32px; height: 3px; background-color: #b71c1c; border-radius: 2px; }
+        
+        /* 코인 획득 시 저금통이 팅기는 효과 */
+        @keyframes catchBounce {
+            0% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.15, 0.85); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+        
+        .score-inline {
+            font-weight: 900;
+            color: #f7ca18;
+        }
     </style>
 </head>
 <body>
@@ -159,7 +222,21 @@
             <div class="slider-dots" id="sliderDots"></div>
         </div>
     </div>
-
+        <div class="section-block">
+            <div class="section-title">
+                <span class="square-icon"></span> BONUS MINI GAME
+            </div>
+            <p class="section-desc">
+                마우스를 아래 상자 안에서 움직여 돼지 저금통을 조종해 보세요! 하늘에서 떨어지는 A+ 코인을 받아 내 학점을 채울 수 있습니다. (현재 내 학점: <span id="game-score-val" class="score-inline">0.0</span> / 4.5)
+            </p>
+            
+            <div class="game-stage" id="gameStage">
+                <div id="game-piggy">
+                    <div class="g-pig-slot"></div>
+                    <div class="g-pig-eye"></div>
+                </div>
+            </div>
+        </div>
     <script>
         // --- 인트로 스크립트 ---
         const coin = document.getElementById('coin');
@@ -244,6 +321,105 @@
         
         // 함수 실행하기
         createBackgroundCoins();
+        // --- 🎮 독립형 미니 게임 스크립트 구역 (기존 자바스크립트 아래에 추가) ---
+        const stage = document.getElementById('gameStage');
+        const gPiggy = document.getElementById('game-piggy');
+        const gScoreVal = document.getElementById('game-score-val');
+        let score = 0;
+        
+        // 1. 게임 창 안에서 마우스가 움직일 때만 돼지 저금통이 마우스를 따라 좌우로 움직임
+        if (stage && gPiggy) {
+            stage.addEventListener('mousemove', (e) => {
+                const stageRect = stage.getBoundingClientRect();
+                let relativeX = e.clientX - stageRect.left;
+                
+                // 저금통이 박스 좌우 벽 밖으로 튀어나가지 않도록 조절
+                if (relativeX < 40) relativeX = 40;
+                if (relativeX > stageRect.width - 40) relativeX = stageRect.width - 40;
+        
+                gPiggy.style.left = `${relativeX}px`;
+            });
+        
+            // 모바일/태블릿 터치 조종 대응
+            stage.addEventListener('touchmove', (e) => {
+                const stageRect = stage.getBoundingClientRect();
+                let relativeX = e.touches[0].clientX - stageRect.left;
+                
+                if (relativeX < 40) relativeX = 40;
+                if (relativeX > stageRect.width - 40) relativeX = stageRect.width - 40;
+        
+                gPiggy.style.left = `${relativeX}px`;
+            });
+        }
+        
+        // 2. 게임 전용 코인을 상자 내부 상단에서 무작위로 떨어뜨리는 함수
+        function spawnGameCoin() {
+            if (!stage || !gPiggy) return;
+        
+            setInterval(() => {
+                const coinEl = document.createElement('div');
+                coinEl.classList.add('game-coin');
+                coinEl.innerText = 'A+';
+        
+                // 코인 크기 고정
+                const size = 40;
+                coinEl.style.width = `${size}px`;
+                coinEl.style.height = `${size}px`;
+                coinEl.style.fontSize = '15px';
+        
+                // 게임 상자 가로 폭 안에서 랜덤한 가로 위치 세팅
+                const maxLeft = stage.clientWidth - size;
+                coinEl.style.left = `${Math.random() * maxLeft}px`;
+                coinEl.style.top = '-40px'; // 상자 맨 위 가려진 부분에서 출발
+        
+                stage.appendChild(coinEl);
+        
+                let currentTop = -40;
+                const speed = Math.random() * 2 + 3; // 코인이 아래로 떨어지는 프레임당 속도 (3~5px)
+        
+                // 코인 하강 및 실시간 충돌 검사 타이머 루프
+                const moveLoop = setInterval(() => {
+                    currentTop += speed;
+                    coinEl.style.top = `${currentTop}px`;
+        
+                    // 코인과 저금통의 화면상 절대 좌표 실시간 계산
+                    const coinRect = coinEl.getBoundingClientRect();
+                    const pigRect = gPiggy.getBoundingClientRect();
+        
+                    // 3. 충돌 판정 (저금통 위로 코인을 받아먹었을 때)
+                    if (
+                        coinRect.bottom >= pigRect.top &&
+                        coinRect.top <= pigRect.bottom &&
+                        coinRect.right >= pigRect.left &&
+                        coinRect.left <= pigRect.right
+                    ) {
+                        score += 1;
+                        let grade = (score * 0.1).toFixed(1);
+                        if (grade > 4.5) grade = "4.5 (수석 졸업! 🎉)";
+                        if (gScoreVal) gScoreVal.innerText = grade;
+        
+                        // 코인을 먹을 때 저금통이 통통 튀는 애니메이션 작동
+                        gPiggy.style.animation = 'none';
+                        setTimeout(() => { gPiggy.style.animation = 'catchBounce 0.2s ease-in-out'; }, 10);
+        
+                        coinEl.remove();
+                        clearInterval(moveLoop);
+                    }
+        
+                    // 받아먹지 못하고 상자 바닥으로 떨어진 코인 삭제
+                    if (currentTop > stage.clientHeight) {
+                        coinEl.remove();
+                        clearInterval(moveLoop);
+                    }
+                }, 20);
+        
+            }, 900); // 0.9초마다 새로운 코인 투하
+        }
+        
+        // 4. 최초 인트로 오프닝 연출(3.2초)이 완벽히 끝난 후 게임 엔진 가동
+        setTimeout(() => {
+            spawnGameCoin();
+        }, 3200);
     </script>
 </body>
 </html>
