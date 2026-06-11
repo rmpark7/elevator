@@ -8,35 +8,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: #f8f9fa; font-family: 'Pretendard', -apple-system, sans-serif; overflow-x: hidden; color: #333; }
 
-        /* --- 🌐 우측 상단 다국어 텍스트 토글 버튼 스타일 --- */
-        .language-toggle {
-            position: fixed;
-            top: 25px;
-            right: 30px;
-            z-index: 2000; /* 본문과 인트로 팝업보다 무조건 위에 노출 */
-            font-size: 0.95rem;
-            font-weight: 500;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 8px 16px;
-            border-radius: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            backdrop-filter: blur(4px);
-            user-select: none;
-        }
-        .lang-btn {
-            cursor: pointer;
-            color: #aaa;
-            transition: color 0.2s ease, font-weight 0.2s ease;
-        }
-        .lang-btn.active {
-            color: #2c3e50;
-            font-weight: 800;
-        }
-        .lang-divider {
-            margin: 0 8px;
-            color: #ddd;
-        }
-
         /* --- 인트로 애니메이션 스타일 --- */
         #intro-container {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -238,12 +209,6 @@
 </head>
 <body>
 
-    <div class="language-toggle">
-        <span id="btn-ko" class="lang-btn" onclick="switchLanguage('ko')">한글</span>
-        <span class="lang-divider">|</span>
-        <span id="btn-en" class="lang-btn active" onclick="switchLanguage('en')">English</span>
-    </div>
-
     <div id="intro-container">
         <div class="coin-aplus" id="coin">A+</div>
         <div class="piggy-bank" id="piggy">
@@ -253,15 +218,15 @@
     </div>
 
     <div id="main-content">
-        <h1 id="txt-main-title">Spatial Protocol Project</h1>
-        <p class="project-sub-desc" id="txt-main-desc">
-            An interactive space design experiment that disrupts the assumptions of everyday environments and introduces unexpected gestures to engage and redirect people's attention.<br><br><strong>Mission! Capture everyone’s attention in the glass elevator!</strong>
+        <h1>Spatial Protocol Project</h1>
+        <p class="project-sub-desc">
+            An interactive space design experiment that disrupts the assumptions of everyday environments and introduces unexpected gestures to engage and redirect people's attention.
         </p>
 
         <div class="section-block">
-            <div class="section-title before" id="txt-before-title">BEFORE : Inside the Glass Elevator Before the Protocol</div>
-            <p class="section-desc" id="txt-before-desc">
-                Most passengers experience social awkwardness and a lack of visual direction. To avoid face-to-face interaction or communication, they tend to adopt a closed posture, keeping their eyes glued to their smartphone screens.<br><br>While this behavior often stems from psychological awkwardness in unfamiliar settings, it is also heavily driven by the powerful inertia of smartphone use—habitually turning on screens for instant comfort and digital familiarity, even in the absence of negative emotions.
+            <div class="section-title before">BEFORE </div>
+            <p class="section-desc">
+                Most passengers experience social awkwardness and a lack of visual direction. To avoid face-to-face interaction or communication, they tend to adopt a closed posture, keeping their eyes glued to their smartphone screens.
             </p>
             <div class="before-img-box">
                 <img src="Before.jpg" alt="Before Image">
@@ -269,8 +234,8 @@
         </div>
 
         <div class="section-block">
-            <div class="section-title after" id="txt-after-title">AFTER : Disrupting Spatial Assumptions</div>
-            <p class="section-desc" id="txt-after-desc">
+            <div class="section-title after">AFTER </div>
+            <p class="section-desc">
                 This is the space after dismantling conventional spatial norms and introducing the "Gesture Protocol."<br>
                 The dynamic design of the red piggy bank and the "A+ Coins" applied to the elevator glass provides passengers with a fresh sense of stimulation and delight. The environment transforms into an interactive space where people’s eyes naturally follow the movement of the elevator, effectively drawing everyone's focus.
             </p>
@@ -282,11 +247,252 @@
                 <div class="slider-wrapper" id="sliderWrapper">
                     <div class="slide-item"><img src="After1.jpg" alt="After Image 1"></div>
                     <div class="slide-item"><img src="After2.jpg" alt="After Image 2"></div>
-                    <div class="slide-item"><img src="After3.jpg" alt="After Image 3"></div>
-                    <div class="slide-item"><img src="After4.jpg" alt="After Image 4"></div>
+                    <div class="slide-item"><img src="After3.jpg" alt="After Image 2"></div>
+                    <div class="slide-item"><img src="After4.jpg" alt="After Image 2"></div>
                     <div class="slide-item">
                         <video src="Video.mp4" controls loop muted playsinline></video>
                     </div>
                 </div>
             </div>
-            <div class="slider-dots" id
+            <div class="slider-dots" id="sliderDots"></div>
+        </div>
+
+        <div class="section-block">
+            <div class="section-title">BONUS MINI GAME</div>
+            <p class="section-desc">
+                Move your mouse inside the box below to control the piggy bank! Catch the falling A+ Coins from the sky to boost your GPA. (Current GPA: <span id="game-score-val" class="score-inline">0.0</span> / 4.5)
+            </p>
+            <p class="section-desc" style="font-weight: bold; color: #e73c30; margin-top: -15px; margin-bottom: 20px;">
+                Good luck to everyone who spots the A+ Coins! Catch those A+ Coins! 🪙
+            </p>
+            
+            <div class="game-stage" id="gameStage">
+                <div id="game-piggy">
+                    <div class="g-pig-slot"></div>
+                    <div class="g-pig-eye"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 인트로 스크립트 (오류 수정 완료) ---
+        const coin = document.getElementById('coin');
+        const piggy = document.getElementById('piggy');
+        const introContainer = document.getElementById('intro-container');
+        const mainContent = document.getElementById('main-content');
+
+        // DOM 요소가 확실히 준비된 후 안전하게 위치 세팅 및 실행
+        if (coin) {
+            coin.style.left = 'calc(50% - 35px)'; 
+        }
+        
+        setTimeout(() => { 
+            if (piggy) piggy.style.animation = "bouncePig 0.4s ease-in-out forwards"; 
+        }, 1200);
+
+        setTimeout(() => {
+            if (introContainer && mainContent) {
+                introContainer.style.opacity = '0';
+                mainContent.style.opacity = '1';
+                setTimeout(() => { introContainer.style.display = 'none'; }, 1000);
+            }
+        }, 3200);
+
+        // --- 슬라이드(Carousel) 스크립트 ---
+        const wrapper = document.getElementById('sliderWrapper');
+        const slides = document.querySelectorAll('.slide-item');
+        const dotsContainer = document.getElementById('sliderDots');
+        let currentIdx = 0;
+        const totalSlides = slides.length;
+
+        if (dotsContainer && slides.length > 0) {
+            slides.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if(i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => { currentIdx = i; updateSlider(); });
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function moveSlide(direction) {
+            currentIdx += direction;
+            if (currentIdx < 0) currentIdx = totalSlides - 1;
+            if (currentIdx >= totalSlides) currentIdx = 0;
+            updateSlider();
+        }
+
+        function updateSlider() {
+            const dots = document.querySelectorAll('.dot');
+            if (wrapper) wrapper.style.transform = `translateX(-${currentIdx * 100}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            if (dots[currentIdx]) dots[currentIdx].classList.add('active');
+        }
+
+        // --- 배경에 A+ 코인을 자동으로 생성하는 함수 ---
+        function createBackgroundCoins() {
+            setTimeout(() => {
+                setInterval(() => {
+                    const bgCoin = document.createElement('div');
+                    bgCoin.classList.add('bg-coin');
+                    bgCoin.innerText = 'A+';
+        
+                    const size = Math.random() * 30 + 30;
+                    bgCoin.style.width = `${size}px`;
+                    bgCoin.style.height = `${size}px`;
+                    bgCoin.style.fontSize = `${size * 0.4}px`;
+        
+                    bgCoin.style.left = `${Math.random() * 100}vw`;
+                    bgCoin.style.top = '-50px';
+        
+                    const duration = Math.random() * 8 + 8;
+                    bgCoin.style.animationDuration = `${duration}s`;
+        
+                    document.body.appendChild(bgCoin);
+        
+                    setTimeout(() => {
+                        bgCoin.remove();
+                    }, duration * 1000);
+        
+                }, 1500);
+            }, 3000);
+        }
+        
+        createBackgroundCoins();
+
+        // --- 🎮 독립형 미니 게임 스크립트 구역 ---
+        const stage = document.getElementById('gameStage');
+        const gPiggy = document.getElementById('game-piggy');
+        const gScoreVal = document.getElementById('game-score-val');
+        let score = 0;
+        let gameIntervalId = null; // 게임 루프 타이머 관리자
+        
+        if (stage && gPiggy) {
+            stage.addEventListener('mousemove', (e) => {
+                const stageRect = stage.getBoundingClientRect();
+                let relativeX = e.clientX - stageRect.left;
+                
+                if (relativeX < 40) relativeX = 40;
+                if (relativeX > stageRect.width - 40) relativeX = stageRect.width - 40;
+        
+                gPiggy.style.left = `${relativeX}px`;
+            });
+        
+            stage.addEventListener('touchmove', (e) => {
+                const stageRect = stage.getBoundingClientRect();
+                let relativeX = e.touches[0].clientX - stageRect.left;
+                
+                if (relativeX < 40) relativeX = 40;
+                if (relativeX > stageRect.width - 40) relativeX = stageRect.width - 40;
+        
+                gPiggy.style.left = `${relativeX}px`;
+            });
+        }
+        
+        function spawnGameCoin() {
+            if (!stage || !gPiggy) return;
+        
+            gameIntervalId = setInterval(() => {
+                const coinEl = document.createElement('div');
+                coinEl.classList.add('game-coin');
+                coinEl.innerText = 'A+';
+        
+                const size = 40;
+                coinEl.style.width = `${size}px`;
+                coinEl.style.height = `${size}px`;
+                coinEl.style.fontSize = '15px';
+        
+                const maxLeft = stage.clientWidth - size;
+                coinEl.style.left = `${Math.random() * maxLeft}px`;
+                coinEl.style.top = '-40px';
+        
+                stage.appendChild(coinEl);
+        
+                let currentTop = -40;
+                const speed = Math.random() * 2 + 3;
+        
+                const moveLoop = setInterval(() => {
+                    currentTop += speed;
+                    coinEl.style.top = `${currentTop}px`;
+        
+                    const coinRect = coinEl.getBoundingClientRect();
+                    const pigRect = gPiggy.getBoundingClientRect();
+        
+                    // 충돌 판정 및 점수 계산 변경
+                    if (
+                        coinRect.bottom >= pigRect.top &&
+                        coinRect.top <= pigRect.bottom &&
+                        coinRect.right >= pigRect.left &&
+                        coinRect.left <= pigRect.right
+                    ) {
+                        score += 1;
+                        let grade = (score * 0.1).toFixed(1);
+                        
+                        if (score >= 45) {
+                            grade = "4.5 (Top Honors! 🎉)";
+                            if (gScoreVal) gScoreVal.innerText = grade;
+                            endGameWithHonors(); 
+                        } else {
+                            if (gScoreVal) gScoreVal.innerText = grade;
+                        }
+        
+                        gPiggy.style.animation = 'none';
+                        setTimeout(() => { gPiggy.style.animation = 'catchBounce 0.2s ease-in-out'; }, 10);
+        
+                        coinEl.remove();
+                        clearInterval(moveLoop);
+                    }
+        
+                    if (currentTop > stage.clientHeight) {
+                        coinEl.remove();
+                        clearInterval(moveLoop);
+                    }
+                }, 20);
+        
+            }, 900);
+        }
+        
+        setTimeout(() => {
+            spawnGameCoin();
+        }, 3200);
+
+        // --- 🏆 수석 졸업 시 게임 정지 및 영어 축하문구 팝업 함수 ---
+        function endGameWithHonors() {
+            // 1. 새로운 코인 생성 인터벌 완벽 제거
+            if (gameIntervalId) {
+                clearInterval(gameIntervalId);
+            }
+        
+            // 2. 화면에 남아 부유하는 코인 삭제 루프 강제 해제 및 청소
+            const remainingCoins = document.querySelectorAll('.game-coin');
+            remainingCoins.forEach(c => c.remove());
+        
+            // 3. 저금통 컨트롤 비활성화 및 마우스 원상 복구
+            if (stage) {
+                stage.style.cursor = 'default';
+                stage.addEventListener('mousemove', (e) => { e.stopPropagation(); }, true);
+                stage.addEventListener('touchmove', (e) => { e.stopPropagation(); }, true);
+            }
+        
+            // 4. 영어 축하 문구 구조 생성
+            const overlay = document.createElement('div');
+            overlay.classList.add('congrats-overlay');
+            
+            overlay.innerHTML = `
+                <div class="congrats-box">
+                    <div class="congrats-title">🎉 Graduation with Top Honors! 🎉</div>
+                    <div class="congrats-subtitle">Spatial Hypothesis Protocol Master (4.5 / 4.5)</div>
+                </div>
+            `;
+        
+            if (stage) {
+                stage.appendChild(overlay);
+                setTimeout(() => {
+                    overlay.style.opacity = '1';
+                }, 50);
+            }
+        }
+    </script>
+</body>
+</html>
